@@ -9,7 +9,10 @@ declare(strict_types=1);
 
 namespace Hryvinskyi\EmailLogger\Model\ResourceModel;
 
-use \Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Hryvinskyi\EmailLogger\Api\Data\LogInterface;
+use Hryvinskyi\EmailLogger\Api\EmailLog\Status;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 class Log extends AbstractDb
 {
@@ -21,5 +24,28 @@ class Log extends AbstractDb
     protected function _construct()
     {
         $this->_init('hryvinskyi_email_log', 'log_entry_id');
+    }
+
+    /**
+     * @param int $days
+     * @param Status $status
+     * @return void
+     * @throws LocalizedException
+     */
+    public function clear(int $days, Status $status): void
+    {
+        if ($days <= 0) {
+            return;
+        }
+
+        $date = date('Y-m-d h:i:s', strtotime('-' . $days . 'days'));
+
+        $this->getConnection()->delete(
+            $this->getMainTable(),
+            [
+                LogInterface::TIME_OF_SENDING_MAIL . ' <= ?' => $date,
+                LogInterface::SENDING_STATUS . ' = ?' => $status->value
+            ]
+        );
     }
 }

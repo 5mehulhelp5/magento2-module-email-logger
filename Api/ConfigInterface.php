@@ -36,10 +36,18 @@ interface ConfigInterface
     public function isSaveEmailContentEnabled(string|int|null $store = null): bool;
 
     /**
-     * Returns the time to live for the email logs in days.
+     * Returns the time to live for sent email logs in days.
      *
      * @param string|int|null $store The store ID or code.
      * @return int
      */
-    public function getEmailLogTtl(string|int|null $store = null): int;
+    public function getEmailLogSentTtl(string|int|null $store = null): int;
+
+    /**
+     * Returns the time to live for failed email logs in days.
+     *
+     * @param string|int|null $store The store ID or code.
+     * @return int
+     */
+    public function getEmailLogFailedTtl(string|int|null $store = null): int;
 }

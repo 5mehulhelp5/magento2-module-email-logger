@@ -12,6 +12,7 @@ use Hryvinskyi\EmailLogger\Api\Data\LogInterface;
 use Hryvinskyi\EmailLogger\Api\Data\LogInterfaceFactory;
 use Hryvinskyi\EmailLogger\Api\Data\LogSearchResultsInterface;
 use Hryvinskyi\EmailLogger\Api\Data\LogSearchResultsInterfaceFactory;
+use Hryvinskyi\EmailLogger\Api\EmailLog\Status;
 use Hryvinskyi\EmailLogger\Api\LogRepositoryInterface;
 use Hryvinskyi\EmailLogger\Model\ResourceModel\Log as LogResource;
 use Hryvinskyi\EmailLogger\Model\ResourceModel\Log\CollectionFactory;
@@ -113,5 +114,14 @@ class LogRepository implements LogRepositoryInterface
     public function deleteById(int $logId): bool
     {
         return $this->delete($this->getById($logId));
+    }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function clear(int $days, Status $status): void
+    {
+        $this->resource->clear($days, $status);
     }
 }

@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Hryvinskyi\EmailLogger\Block\Adminhtml;
 
+use Hryvinskyi\EmailLogger\Api\ConfigInterface;
 use Hryvinskyi\EmailLogger\Api\Data\LogInterface;
 use Magento\Backend\Block\Widget\Container;
 use Magento\Backend\Block\Widget\ContainerInterface;

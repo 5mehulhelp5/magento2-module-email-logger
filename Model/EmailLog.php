@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Hryvinskyi\EmailLogger\Model;
 
+use Hryvinskyi\EmailLogger\Api\ConfigInterface;
 use Hryvinskyi\EmailLogger\Api\Data\LogInterface;
 use Hryvinskyi\EmailLogger\Api\Data\LogInterfaceFactory;
 use Hryvinskyi\EmailLogger\Api\EmailLog\Status;
@@ -31,6 +32,7 @@ class EmailLog implements EmailLogInterface
         private readonly DataObjectHelper $dataObjectHelper,
         private readonly LogInterfaceFactory $entityFactory,
         private readonly LogRepositoryInterface $logRepository,
+        private readonly ConfigInterface $config,
         private array $logHandlers = []
     ) {
         foreach ($this->logHandlers as $handler) {
@@ -63,11 +65,17 @@ class EmailLog implements EmailLogInterface
             'email_bcc' => $this->getEmailsString($emailMessage->getBcc()),
             'email_cc' => $this->getEmailsString($emailMessage->getCc()),
             'email_subject' => $emailMessage->getSubject(),
-            'email_content' => $emailMessage->getBodyText(),
             'store_id' => $storeId,
             'sending_status' => $emailStatus->value,
-            'sending_message' => $sendingMessage,
         ];
+
+        if ($this->config->isSaveEmailContentEnabled()) {
+            $logData['email_content'] = $emailMessage->getBodyText();
+        }
+
+        if ($this->config->isLoggingErrorsEnabled()) {
+            $logData['sending_message'] = $sendingMessage;
+        }
 
         $entity = $this->entityFactory->create();
 

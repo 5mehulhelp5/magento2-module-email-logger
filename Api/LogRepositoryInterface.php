@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Hryvinskyi\EmailLogger\Api;
 
+use Hryvinskyi\EmailLogger\Api\EmailLog\Status;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Hryvinskyi\EmailLogger\Api\Data\LogInterface;
 use Hryvinskyi\EmailLogger\Api\Data\LogSearchResultsInterface;
@@ -77,4 +78,15 @@ interface LogRepositoryInterface
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function deleteById(int $logId): bool;
+
+    /**
+     * Clear logs
+     *
+     * @param int $days
+     * @param Status $status
+     *
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function clear(int $days, Status $status): void;
 }

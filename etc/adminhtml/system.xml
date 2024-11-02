@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright (c) 2024. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="system">
+            <group id="hryvinskyi_email_log" translate="label" type="text" sortOrder="3000" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="email_logging_enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Emails Logging enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="logging_errors_enabled" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Emails Logging errors enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="save_email_content_enabled" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Save Email Content</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enables viewing additional details about letters.</comment>
+                </field>
+                <field id="email_log_sent_ttl" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Clear sent records older than (days)</label>
+                    <validate>validate-digits validate-number-range number-range-0-365</validate>
+                    <comment><![CDATA[Records older than the specified number of days will be automatically deleted. If left empty or set to zero, no records will be deletedRecords older than the specified number of days will be automatically deleted. If left empty or set to zero, no records will be deleted]]></comment>
+                </field>
+                <field id="email_log_failed_ttl" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Clear failed records older than (days)</label>
+                    <validate>validate-digits validate-number-range number-range-0-365</validate>
+                    <comment><![CDATA[Records older than the specified number of days will be automatically deleted. If left empty or set to zero, no records will be deletedRecords older than the specified number of days will be automatically deleted. If left empty or set to zero, no records will be deleted]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
