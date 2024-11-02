@@ -8,6 +8,7 @@
     "magento/framework": "*",
     "laminas/laminas-mail": "^2.16"
   },
+  "license": "MIT",
   "autoload": {
     "files": [
       "registration.php"
