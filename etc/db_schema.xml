@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright (c) 2024. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+-->
+
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="hryvinskyi_email_log" resource="default" engine="innodb" comment="Hryvinskyi Email Log Table">
+        <column xsi:type="int" name="log_entry_id" unsigned="true" nullable="false" identity="true" comment="Log Id"/>
+        <column xsi:type="text" name="email_sender" nullable="false" comment="Sender"/>
+        <column xsi:type="text" name="email_recipient" nullable="false" comment="Recipient"/>
+        <column xsi:type="text" name="email_bcc" nullable="true" comment="Bcc"/>
+        <column xsi:type="text" name="email_cc" nullable="true" comment="Bcc"/>
+        <column xsi:type="text" name="email_subject" nullable="false" comment="Subject"/>
+        <column xsi:type="text" name="email_content" nullable="true" comment="Content"/>
+        <column xsi:type="int" name="store_id" nullable="false" comment="Store Id"/>
+        <column xsi:type="text" name="sending_status" nullable="false" comment="Status"/>
+        <column xsi:type="text" name="sending_message" nullable="true" comment="Sending Message"/>
+        <column xsi:type="timestamp" name="time_of_sending_mail" nullable="false" default="CURRENT_TIMESTAMP" on_update="false" comment="Created At"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="log_entry_id"/>
+        </constraint>
+
+        <index referenceId="EMAIL_LOG_RECIPIENT_SUBJECT_BCC" indexType="fulltext">
+            <column name="email_sender"/>
+            <column name="email_recipient"/>
+            <column name="email_bcc"/>
+            <column name="email_subject"/>
+            <column name="email_content"/>
+            <column name="sending_message"/>
+        </index>
+    </table>
+</schema>

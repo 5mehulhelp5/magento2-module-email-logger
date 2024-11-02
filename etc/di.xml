@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright (c) 2024. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Hryvinskyi\EmailLogger\Api\EmailLogInterface" type="Hryvinskyi\EmailLogger\Model\EmailLog"/>
+    <preference for="Hryvinskyi\EmailLogger\Api\ConfigInterface" type="Hryvinskyi\EmailLogger\Model\Config"/>
+    <preference for="Hryvinskyi\EmailLogger\Api\Data\LogInterface" type="Hryvinskyi\EmailLogger\Model\Log"/>
+    <preference for="Hryvinskyi\EmailLogger\Api\LogRepositoryInterface" type="Hryvinskyi\EmailLogger\Model\LogRepository"/>
+    <preference for="Hryvinskyi\EmailLogger\Api\Data\LogSearchResultsInterface" type="Hryvinskyi\EmailLogger\Model\LogSearchResults"/>
+
+    <type name="Magento\Framework\Mail\TransportInterface">
+        <plugin name="hryvinskyi_email_logging" type="Hryvinskyi\EmailLogger\Plugin\EmailLogging" sortOrder="99999"
+                disabled="false"/>
+    </type>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="hryvinskyi_email_logger_log_listing_data_source" xsi:type="string">Hryvinskyi\EmailLogger\Model\ResourceModel\Log\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Hryvinskyi\EmailLogger\Model\ResourceModel\Log\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">hryvinskyi_email_log</argument>
+            <argument name="resourceModel" xsi:type="string">Hryvinskyi\EmailLogger\Model\ResourceModel\Log</argument>
+        </arguments>
+    </type>
+</config>

@@ -1,0 +1,23 @@
+{
+  "hryvinskyi_email_log": {
+    "column": {
+      "log_entry_id": true,
+      "email_sender": true,
+      "email_recipient": true,
+      "email_bcc": true,
+      "email_cc": true,
+      "email_subject": true,
+      "email_content": true,
+      "store_id": true,
+      "sending_status": true,
+      "sending_message": true,
+      "time_of_sending_mail": true
+    },
+    "index": {
+      "EMAIL_LOG_RECIPIENT_SUBJECT_BCC": true
+    },
+    "constraint": {
+      "PRIMARY": true
+    }
+  }
+}
