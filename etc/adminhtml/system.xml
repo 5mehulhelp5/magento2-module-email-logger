@@ -12,7 +12,7 @@
     <system>
         <section id="system">
             <group id="hryvinskyi_email_log" translate="label" type="text" sortOrder="3000" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>General</label>
+                <label>Hryvinskyi Email Logger</label>
                 <field id="email_logging_enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Emails Logging enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
