@@ -30,7 +30,7 @@ The **EmailLogger** module is designed to log all outgoing emails from your Mage
 ## Configuration
 To configure the module, follow these steps:
 
-1. Go to **Stores > Configuration > Hryvinskyi > EmailLogger**.
+1. Go to **Stores > Configuration > Advanced > System > Hryvinskyi Email Logger**.
 2. Enable or disable logging as needed.
 3. Customize the log retention period if desired.
 
