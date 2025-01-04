@@ -15,7 +15,7 @@
     <preference for="Hryvinskyi\EmailLogger\Api\Data\LogSearchResultsInterface" type="Hryvinskyi\EmailLogger\Model\LogSearchResults"/>
 
     <type name="Magento\Framework\Mail\TransportInterface">
-        <plugin name="hryvinskyi_email_logging" type="Hryvinskyi\EmailLogger\Plugin\EmailLogging" sortOrder="99999"
+        <plugin name="hryvinskyi_email_logging" type="Hryvinskyi\EmailLogger\Plugin\EmailLogging" sortOrder="-99999"
                 disabled="false"/>
     </type>
 

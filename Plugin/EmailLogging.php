@@ -57,7 +57,10 @@ class EmailLogging
             $this->emailLog->logEmail($message, $storeId, Status::SENT);
         } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage() . "\n" . $e->getTraceAsString());
-            $this->emailLog->logEmail($message, $storeId, Status::FAILED, $e->getMessage());
+            
+            if ($this->config->isLoggingErrorsEnabled()) {
+                $this->emailLog->logEmail($message, $storeId, Status::FAILED, $e->getMessage());
+            }
 
             throw $e;
         }
