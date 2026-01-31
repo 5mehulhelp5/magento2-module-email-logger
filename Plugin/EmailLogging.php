@@ -1,8 +1,8 @@
 <?php
 /**
- * Copyright (c) 2024. Volodymyr Hryvinskyi.  All rights reserved.
- * @author: <mailto:volodymyr@hryvinskyi.com>
- * @github: <https://github.com/hryvinskyi>
+ * Copyright (c) 2024-2026. Volodymyr Hryvinskyi. All rights reserved.
+ * Author: Volodymyr Hryvinskyi <volodymyr@hryvinskyi.com>
+ * GitHub: https://github.com/hryvinskyi
  */
 
 declare(strict_types=1);
@@ -12,13 +12,19 @@ namespace Hryvinskyi\EmailLogger\Plugin;
 use Hryvinskyi\EmailLogger\Api\ConfigInterface;
 use Hryvinskyi\EmailLogger\Api\EmailLog\Status;
 use Hryvinskyi\EmailLogger\Api\EmailLogInterface;
-use Laminas\Mail\Message;
+use Magento\Framework\Mail\EmailMessageInterface;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
 class EmailLogging
 {
+    /**
+     * @param EmailLogInterface $emailLog
+     * @param ConfigInterface $config
+     * @param StoreManagerInterface $storeManager
+     * @param LoggerInterface $logger
+     */
     public function __construct(
         private readonly EmailLogInterface $emailLog,
         private readonly ConfigInterface $config,
@@ -35,7 +41,6 @@ class EmailLogging
      *
      * @return void
      * @throws \Throwable If the email sending fails.
-     *
      */
     public function aroundSendMessage(
         TransportInterface $subject,
@@ -49,15 +54,20 @@ class EmailLogging
             return;
         }
 
-        // Note: If the module is active while sending an email, it will log the action.
-        $message = Message::fromString($subject->getMessage()->getRawMessage())->setEncoding('utf-8');
+        $message = $subject->getMessage();
+
+        if (!$message instanceof EmailMessageInterface) {
+            $proceed();
+
+            return;
+        }
 
         try {
             $proceed();
             $this->emailLog->logEmail($message, $storeId, Status::SENT);
         } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage() . "\n" . $e->getTraceAsString());
-            
+
             if ($this->config->isLoggingErrorsEnabled()) {
                 $this->emailLog->logEmail($message, $storeId, Status::FAILED, $e->getMessage());
             }

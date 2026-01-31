@@ -1,8 +1,8 @@
 <?php
 /**
- * Copyright (c) 2024. Volodymyr Hryvinskyi.  All rights reserved.
- * @author: <mailto:volodymyr@hryvinskyi.com>
- * @github: <https://github.com/hryvinskyi>
+ * Copyright (c) 2024-2026. Volodymyr Hryvinskyi. All rights reserved.
+ * Author: Volodymyr Hryvinskyi <volodymyr@hryvinskyi.com>
+ * GitHub: https://github.com/hryvinskyi
  */
 
 declare(strict_types=1);
@@ -16,16 +16,20 @@ use Hryvinskyi\EmailLogger\Api\EmailLog\Status;
 use Hryvinskyi\EmailLogger\Api\EmailLogInterface;
 use Hryvinskyi\EmailLogger\Api\LogHandlerInterface;
 use Hryvinskyi\EmailLogger\Api\LogRepositoryInterface;
-use Laminas\Mail\AddressList;
-use Laminas\Mail\Message;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Mail\Address;
+use Magento\Framework\Mail\EmailMessageInterface;
 
 class EmailLog implements EmailLogInterface
 {
     /**
      * EmailLog constructor.
      *
+     * @param DataObjectHelper $dataObjectHelper
+     * @param LogInterfaceFactory $entityFactory
+     * @param LogRepositoryInterface $logRepository
+     * @param ConfigInterface $config
      * @param LogHandlerInterface[] $logHandlers List of handlers for extended logging.
      */
     public function __construct(
@@ -43,18 +47,12 @@ class EmailLog implements EmailLogInterface
     }
 
     /**
-     * Logs email details into the database.
+     * {@inheritDoc}
      *
-     * @param Message $emailMessage The email message object to be logged.
-     * @param int $storeId The store ID where the email is being sent from.
-     * @param Status $emailStatus The status of the email (sent or failed).
-     * @param string $sendingMessage Optional description or message regarding the sending status.
-     *
-     * @return void
      * @throws CouldNotSaveException
      */
     public function logEmail(
-        Message $emailMessage,
+        EmailMessageInterface $emailMessage,
         int $storeId,
         Status $emailStatus,
         string $sendingMessage = ''
@@ -79,36 +77,39 @@ class EmailLog implements EmailLogInterface
 
         $entity = $this->entityFactory->create();
 
-        // Populate the log entity with the email data.
         $this->dataObjectHelper->populateWithArray(
             $entity,
             $logData,
             LogInterface::class
         );
 
-        // Invoke additional handlers for extended logging if available.
         foreach ($this->logHandlers as $handler) {
             $handler->handle($logData, $emailMessage, $entity);
         }
 
-        // Log the email data to the database.
         $this->logRepository->save($entity);
     }
 
     /**
-     * Converts the email address list into a string.
+     * Converts the email address array into a formatted string.
      *
-     * @param AddressList $addressList The email address list to be converted.
+     * @param Address[]|null $addresses The email address array to be converted.
      *
      * @return string
      */
-    private function getEmailsString(AddressList $addressList): string
+    private function getEmailsString(?array $addresses): string
     {
-        $emails = [];
-        foreach ($addressList as $address) {
-            $emails[] = ($address->getName() ? $address->getName() . ' ' : '') . '<' . $address->getEmail() . '>';
+        if ($addresses === null) {
+            return '';
         }
 
-        return implode(", ", $emails);
+        $emails = [];
+        foreach ($addresses as $address) {
+            $name = $address->getName();
+            $email = $address->getEmail();
+            $emails[] = ($name ? $name . ' ' : '') . '<' . $email . '>';
+        }
+
+        return implode(', ', $emails);
     }
 }
